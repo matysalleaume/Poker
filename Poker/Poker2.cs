@@ -7,7 +7,6 @@ namespace Poker
 {
     class Program
     {
-    	//testhvenubhes
         // -----------------------
         // DECLARATION DES DONNEES
         // -----------------------
@@ -71,8 +70,8 @@ namespace Poker
         {
             Random random = new Random();
             carte nouvelleCarte;
-            nouvelleCarte.valeur = valeurs[random.Next(valeurs.Length)];
-            nouvelleCarte.famille = familles[random.Next(familles.Length)];
+            nouvelleCarte.valeur = valeurs[random.Next(13)];
+            nouvelleCarte.famille = familles[random.Next(4)];
             return nouvelleCarte;
         }
 
@@ -96,15 +95,61 @@ namespace Poker
         // La valeur retournée est un élement de l'énumération 'combinaison' (=constante)
         public static combinaison chercheCombinaison(carte[] unJeu)
         {
-			int [] similaire = {0,0,0,0,0};
-			char [,] quintes = { {'X','V','D','R','A'},
-								 {'9','X','V','D','R'},
-								 {'8','9','X','V','D'},
-								 {'7','8','9','X','V'}
-								};
-			char [,] paire = { {'A','A'},{'2','2'},{'3','3'},{'4','4'},{'5','5'},{'6','6'},{'7','7'},{'8','8'},{'9','9'},{'X','X'},{'V','V'},{'D','D'},{'R','R'}};
-			char [,] double_paire
-				
+			{
+            Array.Sort(unJeu, (x, y) => x.valeur.CompareTo(y.valeur)); // Tri du tableau par valeur
+
+            bool quinte = true;
+            for (int i = 1; i < 5; i++)
+            {
+                if (unJeu[i].valeur != unJeu[i - 1].valeur + 1)
+                {
+                    quinte = false;
+                    break;
+                }
+            }
+
+            bool couleur = true;
+            for (int i = 1; i < 5; i++)
+            {
+                if (unJeu[i].famille != unJeu[i - 1].famille)
+                {
+                    couleur = false;
+                    break;
+                }
+            }
+
+            if (quinte && couleur)
+                return combinaison.QUINTE_FLUSH;
+            else if (quinte)
+                return combinaison.QUINTE;
+            else if (couleur)
+                return combinaison.COULEUR;
+
+            int occurrences = 1;
+            int maxOccurrences = 1;
+            for (int i = 1; i < 5; i++)
+            {
+                if (unJeu[i].valeur == unJeu[i - 1].valeur)
+                {
+                    occurrences++;
+                    if (occurrences > maxOccurrences)
+                        maxOccurrences = occurrences;
+                }
+                else
+                {
+                    occurrences = 1;
+                }
+            }
+
+            switch (maxOccurrences)
+            {
+                case 1: return combinaison.RIEN;
+                case 2: return combinaison.PAIRE;
+                case 3: return combinaison.BRELAN;
+                case 4: return combinaison.CARRE;
+                case 5: return combinaison.QUINTE;
+                default: return combinaison.RIEN;
+            }	
         }
 
         // Echange des cartes
@@ -118,7 +163,17 @@ namespace Poker
         // Pour afficher le Menu pricipale
         private static void afficheMenu()
         {
-
+			 private static char afficheMenu()
+        
+            Console.WriteLine("------------------------------");
+            Console.WriteLine("             POKER            ");
+            Console.WriteLine("------------------------------");
+            Console.WriteLine("1) Jouer");
+            Console.WriteLine("2) Voir les scores");
+            Console.WriteLine("3) Quitter");
+            Console.Write("Choisissez une option (1-3): ");
+            return char.ToUpper(Console.ReadKey().KeyChar);
+        
         }
 
         // Jouer au Poker
