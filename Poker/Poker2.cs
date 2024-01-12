@@ -7,7 +7,6 @@ namespace Poker
 {
     class Program
     {
-    	//test
         // -----------------------
         // DECLARATION DES DONNEES
         // -----------------------
@@ -69,7 +68,11 @@ namespace Poker
         // Retourne une expression de type "structure carte"
         public static carte tirage()
         {
-            
+            Random random = new Random();
+            carte nouvelleCarte;
+            nouvelleCarte.valeur = valeurs[random.Next(valeurs.Length)];
+            nouvelleCarte.famille = familles[random.Next(familles.Length)];
+            return nouvelleCarte;
         }
 
         // Indique si une carte est déjà présente dans le jeu
@@ -77,7 +80,14 @@ namespace Poker
         // Retourne un entier (booléen)
         public static bool carteUnique(carte uneCarte, carte[] unJeu, int numero)
         {
-
+			  for (int i = 0; i < numero; i++)
+            {
+                if (uneCarte.valeur == unJeu[i].valeur && uneCarte.famille == unJeu[i].famille)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         // Calcule et retourne la COMBINAISON (paire, double-paire... , quinte-flush)
@@ -85,7 +95,15 @@ namespace Poker
         // La valeur retournée est un élement de l'énumération 'combinaison' (=constante)
         public static combinaison chercheCombinaison(carte[] unJeu)
         {
-
+			int [] similaire = {0,0,0,0,0};
+			char [,] quintes = { {'X','V','D','R','A'},
+								 {'9','X','V','D','R'},
+								 {'8','9','X','V','D'},
+								 {'7','8','9','X','V'}
+								};
+			char [,] paire = { {'A','A'},{'2','2'},{'3','3'},{'4','4'},{'5','5'},{'6','6'},{'7','7'},{'8','8'},{'9','9'},{'X','X'},{'V','V'},{'D','D'},{'R','R'}};
+			char [,] double_paire
+				
         }
 
         // Echange des cartes
@@ -99,7 +117,7 @@ namespace Poker
         // Pour afficher le Menu pricipale
         private static void afficheMenu()
         {
-			bdfcdfdbdv
+
         }
 
         // Jouer au Poker
@@ -111,9 +129,15 @@ namespace Poker
 
         // Tirage d'un jeu de 5 cartes
         // Paramètre : le tableau de 5 cartes à remplir
-        private static void tirageDuJeu(carte[] unJeu)
+        aprivate static void tirageDuJeu(carte[] unJeu)
         {
-
+			 for (int i = 0; i < unJeu.Length; i++)
+            {
+                do
+                {
+                    unJeu[i] = tirage();
+                } while (!carteUnique(unJeu[i], unJeu, i));
+            }
         }
 
         // Affiche à l'écran une carte {valeur;famille} 
